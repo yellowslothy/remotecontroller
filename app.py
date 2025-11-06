@@ -75,7 +75,7 @@ st.markdown(f"""
         color: #333; /* 비선택 버튼 글씨색 */
     }}
 
-    /* 3. 냉방 모드 선택 시 스타일 (ID와 내부 button 태그를 직접 타겟) */
+    /* 3. 냉방 모드 선택 시 스타일 */
     #widget-container-{cool_container_id} button {{
         background-color: #D0EFFF !important; /* 배경: 하늘색 */
         color: #0044AA !important; /* 글씨: 진한 파랑색 */
@@ -86,7 +86,7 @@ st.markdown(f"""
         color: #0044AA !important; 
     }}
 
-    /* 4. 난방 모드 선택 시 스타일 (ID와 내부 button 태그를 직접 타겟) */
+    /* 4. 난방 모드 선택 시 스타일 */
     #widget-container-{heat_container_id} button {{
         background-color: #FFC0CB !important; /* 배경: 연한 핑크 */
         color: #CC0000 !important; /* 글씨: 빨강색 */
@@ -104,11 +104,25 @@ st.markdown(f"""
         gap: 10px;
         margin-top: 15px;
     }}
+    
+    /* 5. 현재 온도 숫자 표시를 검은색으로 변경 */
     .current-temp-display {{
         font-size: 3rem;
         font-weight: 900;
-        color: #3b82f6;
+        color: #000000; /* 검은색 */
     }}
+
+    /* 6. 현재 설정 (st.info) 섹션의 글씨색을 검은색으로 변경 */
+    /* st.info 컨테이너 내 모든 텍스트 요소를 타겟 */
+    .st-emotion-cache-1ftrzwx {{ /* st.info 컨테이너의 내부 클래스 (Streamlit 버전마다 다를 수 있음) */
+        color: #000000 !important;
+    }}
+    .st-emotion-cache-1ftrzwx h1, .st-emotion-cache-1ftrzwx h2, 
+    .st-emotion-cache-1ftrzwx h3, .st-emotion-cache-1ftrzwx p, 
+    .st-emotion-cache-1ftrzwx li {{
+        color: #000000 !important;
+    }}
+
     </style>
     <div class="remote-container">
     """, unsafe_allow_html=True)
