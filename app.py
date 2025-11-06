@@ -1,5 +1,6 @@
 import streamlit as st
 
+# --- 1. 초기 상태 설정 (Session State 초기화) ---
 def init_state():
     """Streamlit 세션 상태를 초기화합니다."""
     if 'power' not in st.session_state:
@@ -11,13 +12,14 @@ def init_state():
 
 init_state()
 
+# --- 2. UI 설정 및 레이아웃 (리모컨 디자인 및 배경색) ---
 st.set_page_config(layout="centered", page_title="중앙 냉난방 시스템 리모컨")
 
 st.markdown("""
     <style>
     /* 1. 전체 배경색을 회색으로 설정 */
     div.stApp {
-        background-color: #CCCCCC; /* 회색 배경 */
+        background-color: #CCCCCC; 
     }
     .remote-container {
         max-width: 400px;
@@ -56,17 +58,27 @@ st.markdown("""
     }
 
     /* 3. 냉방 모드 선택 시 스타일 */
-    .mode-cool-selected > button {
-        background-color: #D0EFFF; /* 배경: 하늘색 */
-        color: #0044AA; /* 글씨: 진한 파랑색 */
-        border-color: #0044AA; 
+    .mode-cool-selected button {
+        background-color: #D0EFFF !important; /* 배경: 하늘색 */
+        color: #0044AA !important; /* 글씨: 진한 파랑색 */
+        border-color: #0044AA !important;
     }
 
     /* 4. 난방 모드 선택 시 스타일 */
-    .mode-heat-selected > button {
-        background-color: #FFDDD0; /* 배경: 연한 빨간색 */
-        color: #CC0000; /* 글씨: 빨간색 */
-        border-color: #CC0000;
+    .mode-heat-selected button {
+        background-color: #FFC0CB !important; /* 배경: 연한 핑크 */
+        color: #CC0000 !important; /* 글씨: 빨강색 */
+        border-color: #CC0000 !important;
+    }
+    
+    /* Streamlit의 내부 버튼 섀도우 제거 및 호버 시 색상 유지 */
+    .mode-cool-selected button:hover {
+        background-color: #D0EFFF !important; 
+        color: #0044AA !important; 
+    }
+    .mode-heat-selected button:hover {
+        background-color: #FFC0CB !important; 
+        color: #CC0000 !important; 
     }
 
     .temp-vertical-control {
@@ -88,6 +100,7 @@ st.markdown("""
 
 st.title("❄️ 중앙 냉난방 시스템 원격 제어")
 
+# --- 3. 상태 표시부 ---
 status_color = "red" if st.session_state.power == 'OFF' else "#10b981"
 status_emoji = "🔴" if st.session_state.power == 'OFF' else "🟢"
 
@@ -99,14 +112,17 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 
 
+# 시스템이 켜져 있을 때만 제어판 표시
 if st.session_state.power == 'ON':
     
+    # --- 현재 설정 표시 ---
     st.info(f"""
     **현재 설정**
     - 모드: {st.session_state.mode}
     - 희망 온도: {st.session_state.target_temp}°C
     """)
 
+    # --- 4. 작동 모드 제어 ---
     st.header("1. 작동 모드")
     mode_options = ['Cool', 'Heat']
     mode_labels = {'Cool': '냉방 🧊', 'Heat': '난방 🔥'}
@@ -115,22 +131,25 @@ if st.session_state.power == 'ON':
     for i, mode in enumerate(mode_options):
         is_selected = st.session_state.mode == mode
         
+        # 선택된 모드에 따라 CSS 클래스를 동적으로 설정
         if is_selected:
             if mode == 'Cool':
                 css_class = 'mode-cool-selected'
             else: # mode == 'Heat'
                 css_class = 'mode-heat-selected'
         else:
-            css_class = '' 
+            css_class = '' # 비선택 시 기본 스타일 유지
 
         with cols[i]:
+            # st.markdown을 사용하여 버튼을 감싸고 동적 CSS 클래스 적용
             st.markdown(f'<div class="{css_class}">', unsafe_allow_html=True)
             if st.button(mode_labels[mode], key=f"mode_{mode}"):
                 st.session_state.mode = mode
                 st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True) 
+            st.markdown('</div>', unsafe_allow_html=True) # 닫는 div 태그
 
 
+    # --- 5. 희망 온도 제어 (버튼 방식, 수직 배치) ---
     st.header("2. 희망 온도")
     
     MIN_TEMP = 18
@@ -148,24 +167,29 @@ if st.session_state.power == 'ON':
             st.session_state.target_temp -= 1
             st.toast("온도 -1°C", icon="🔽")
 
-    temp_col = st.columns([1, 2, 1])[1] 
+    # 수직 제어를 위한 컨테이너 시작
+    temp_col = st.columns([1, 2, 1])[1] # 중앙 컬럼 확보
     
     with temp_col:
         st.markdown('<div class="temp-vertical-control">', unsafe_allow_html=True)
         
+        # 1. 온도 올리기 버튼 (상단)
         st.button("▲", on_click=increase_temp, key='temp_up', help="온도를 1도 올립니다.", 
                   use_container_width=True)
                   
+        # 2. 현재 온도 표시 (중앙)
         st.markdown(f'<div style="text-align: center; width: 100%;"><div class="current-temp-display">{st.session_state.target_temp}°C</div></div>', unsafe_allow_html=True)
 
+        # 3. 온도 내리기 버튼 (하단)
         st.button("▼", on_click=decrease_temp, key='temp_down', help="온도를 1도 내립니다.", 
                   use_container_width=True)
                   
-        st.markdown('</div>', unsafe_allow_html=True) 
+        st.markdown('</div>', unsafe_allow_html=True) # 수직 제어 컨테이너 종료
 
     st.markdown(f"<div style='text-align: center; margin-top: 10px; font-size: 0.85rem;'>현재 온도 범위: {MIN_TEMP}°C ~ {MAX_TEMP}°C</div>", unsafe_allow_html=True)
 
 
+    # --- 6. 설정 적용 버튼 (실제 시스템 명령 시뮬레이션) ---
     def apply_settings():
         """설정 적용 시뮬레이션 및 피드백"""
         st.toast(f"설정이 적용되었습니다: 모드={st.session_state.mode}, 온도={st.session_state.target_temp}°C", icon='✅')
@@ -176,7 +200,7 @@ if st.session_state.power == 'ON':
 else:
     st.warning("시스템이 현재 꺼져 있습니다. 전원 버튼을 눌러 켜주세요.")
 
-
+# --- 7. 전원 버튼 (항상 표시) ---
 st.markdown("<br>", unsafe_allow_html=True)
 power_col1, power_col2, power_col3 = st.columns([1, 2, 1])
 
