@@ -44,21 +44,22 @@ st.markdown("""
         font-weight: bold;
         transition: all 0.2s;
     }
-    .temp-control-container {
+    .temp-vertical-control {
         display: flex;
-        justify-content: space-around;
+        flex-direction: column;
         align-items: center;
+        gap: 10px;
         margin-top: 15px;
-    }
-    .temp-button {
-        width: 100px;
-        height: 100px;
-        font-size: 2rem;
     }
     .current-temp-display {
         font-size: 3rem;
         font-weight: 900;
         color: #3b82f6;
+    }
+    .temp-control-button {
+        width: 100%;
+        height: 50px;
+        font-size: 1.5rem;
     }
     </style>
     <div class="remote-container">
@@ -116,16 +117,20 @@ if st.session_state.power == 'ON':
             st.session_state.target_temp -= 1
             st.toast("온도 -1°C", icon="🔽")
 
-    temp_col1, temp_col2, temp_col3 = st.columns([1, 2, 1])
+    temp_col = st.columns([1, 2, 1])[1]
+    
+    with temp_col:
+        st.markdown('<div class="temp-vertical-control">', unsafe_allow_html=True)
+        
+        st.button("▲", on_click=increase_temp, key='temp_up', help="온도를 1도 올립니다.", 
+                  use_container_width=True)
+                  
+        st.markdown(f'<div style="text-align: center; width: 100%;"><div class="current-temp-display">{st.session_state.target_temp}°C</div></div>', unsafe_allow_html=True)
 
-    with temp_col1:
-        st.button("▲", on_click=increase_temp, key='temp_up', help="온도를 1도 올립니다.")
-
-    with temp_col2:
-        st.markdown(f'<div class="current-temp-display">{st.session_state.target_temp}°C</div>', unsafe_allow_html=True)
-
-    with temp_col3:
-        st.button("▼", on_click=decrease_temp, key='temp_down', help="온도를 1도 내립니다.")
+        st.button("▼", on_click=decrease_temp, key='temp_down', help="온도를 1도 내립니다.", 
+                  use_container_width=True)
+                  
+        st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown(f"<div style='text-align: center; margin-top: 10px; font-size: 0.85rem;'>현재 온도 범위: {MIN_TEMP}°C ~ {MAX_TEMP}°C</div>", unsafe_allow_html=True)
 
