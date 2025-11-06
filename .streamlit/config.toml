@@ -1,1 +1,7 @@
+[server]
+enableCORS = true
+enableXsrfProtection = true
+runOnSave = true
 
+[global]
+static_dirs = ["static"]
