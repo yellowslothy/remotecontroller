@@ -45,7 +45,6 @@ st.markdown(f"""
         padding: 20px;
         border-radius: 20px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        /* 리모컨 컨테이너 배경은 흰색으로 설정하여 대비를 줌 */
         background-color: #FFFFFF; 
         font-family: 'Arial', sans-serif;
     }}
@@ -62,8 +61,17 @@ st.markdown(f"""
         justify-content: space-between;
         align-items: center;
     }}
+
+    /* 2. 전체 제목 (st.title)을 검은색으로 변경 */
+    h1 {{
+        color: #000000 !important;
+    }}
+    /* 3. 섹션 헤더 (st.header)를 검은색으로 변경 */
+    h2 {{
+        color: #000000 !important;
+    }}
     
-    /* 2. 작동 모드 버튼 기본 스타일 */
+    /* 4. 작동 모드 버튼 기본 스타일 */
     .stButton>button {{
         width: 100%;
         border-radius: 8px;
@@ -75,7 +83,7 @@ st.markdown(f"""
         color: #333; /* 비선택 버튼 글씨색 */
     }}
 
-    /* 3. 냉방 모드 선택 시 스타일 */
+    /* 5. 냉방 모드 선택 시 스타일 */
     #widget-container-{cool_container_id} button {{
         background-color: #D0EFFF !important; /* 배경: 하늘색 */
         color: #0044AA !important; /* 글씨: 진한 파랑색 */
@@ -86,7 +94,7 @@ st.markdown(f"""
         color: #0044AA !important; 
     }}
 
-    /* 4. 난방 모드 선택 시 스타일 */
+    /* 6. 난방 모드 선택 시 스타일 */
     #widget-container-{heat_container_id} button {{
         background-color: #FFC0CB !important; /* 배경: 연한 핑크 */
         color: #CC0000 !important; /* 글씨: 빨강색 */
@@ -105,18 +113,15 @@ st.markdown(f"""
         margin-top: 15px;
     }}
     
-    /* 5. 현재 온도 숫자 표시를 검은색으로 변경 */
+    /* 7. 현재 온도 숫자 표시를 검은색으로 변경 */
     .current-temp-display {{
         font-size: 3rem;
         font-weight: 900;
         color: #000000; /* 검은색 */
     }}
 
-    /* 6. 현재 설정 (st.info) 섹션의 글씨색을 검은색으로 변경 */
-    /* st.info 컨테이너 내 모든 텍스트 요소를 타겟 */
-    .st-emotion-cache-1ftrzwx {{ /* st.info 컨테이너의 내부 클래스 (Streamlit 버전마다 다를 수 있음) */
-        color: #000000 !important;
-    }}
+    /* 8. 현재 설정 (st.info) 섹션의 글씨색을 검은색으로 변경 */
+    .st-emotion-cache-1ftrzwx, 
     .st-emotion-cache-1ftrzwx h1, .st-emotion-cache-1ftrzwx h2, 
     .st-emotion-cache-1ftrzwx h3, .st-emotion-cache-1ftrzwx p, 
     .st-emotion-cache-1ftrzwx li {{
