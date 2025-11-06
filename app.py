@@ -15,23 +15,58 @@ init_state()
 # --- 2. UI 설정 및 레이아웃 (리모컨 디자인 및 배경색) ---
 st.set_page_config(layout="centered", page_title="중앙 냉난방 시스템 리모컨")
 
-st.markdown("""
+# 모드 상태에 따라 동적으로 CSS를 생성하여 버튼 ID에 스타일을 적용합니다.
+# 이 방법이 Streamlit의 내부 스타일을 가장 강력하게 덮어쓸 수 있습니다.
+active_mode = st.session_state.mode
+
+# 선택된 모드에 따른 스타일 정의
+cool_style = ''
+heat_style = ''
+
+if active_mode == 'Cool':
+    # 냉방 선택 시: 하늘색 배경, 진한 파랑 글씨
+    cool_style = """
+        #mode-cool button {
+            background-color: #D0EFFF !important; 
+            color: #0044AA !important; 
+            border-color: #0044AA !important;
+        }
+        #mode-cool button:hover {
+            background-color: #D0EFFF !important;
+            color: #0044AA !important;
+        }
+    """
+elif active_mode == 'Heat':
+    # 난방 선택 시: 연한 핑크 배경, 빨강 글씨
+    heat_style = """
+        #mode-heat button {
+            background-color: #FFC0CB !important; 
+            color: #CC0000 !important; 
+            border-color: #CC0000 !important;
+        }
+        #mode-heat button:hover {
+            background-color: #FFC0CB !important;
+            color: #CC0000 !important;
+        }
+    """
+
+
+st.markdown(f"""
     <style>
     /* 1. 전체 배경색을 회색으로 설정 */
-    div.stApp {
+    div.stApp {{
         background-color: #CCCCCC; 
-    }
-    .remote-container {
+    }}
+    .remote-container {{
         max-width: 400px;
         margin: 0 auto;
         padding: 20px;
         border-radius: 20px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        /* 리모컨 컨테이너 배경은 흰색으로 설정하여 대비를 줌 */
         background-color: #FFFFFF; 
         font-family: 'Arial', sans-serif;
-    }
-    .status-display {
+    }}
+    .status-display {{
         background-color: #1f2937; /* 다크 블루/그레이 디스플레이 */
         color: #10b981; /* 에메랄드 그린 텍스트 */
         padding: 15px;
@@ -43,10 +78,10 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
+    }}
     
     /* 2. 작동 모드 버튼 기본 스타일 */
-    .stButton>button {
+    .stButton>button {{
         width: 100%;
         border-radius: 8px;
         height: 50px;
@@ -55,44 +90,24 @@ st.markdown("""
         border: 1px solid #ddd; /* 비선택 버튼 테두리 */
         background-color: #f0f2f6; /* 비선택 버튼 배경 */
         color: #333; /* 비선택 버튼 글씨색 */
-    }
+    }}
 
-    /* 3. 냉방 모드 선택 시 스타일 */
-    .mode-cool-selected button {
-        background-color: #D0EFFF !important; /* 배경: 하늘색 */
-        color: #0044AA !important; /* 글씨: 진한 파랑색 */
-        border-color: #0044AA !important;
-    }
-
-    /* 4. 난방 모드 선택 시 스타일 */
-    .mode-heat-selected button {
-        background-color: #FFC0CB !important; /* 배경: 연한 핑크 */
-        color: #CC0000 !important; /* 글씨: 빨강색 */
-        border-color: #CC0000 !important;
-    }
+    /* 동적 ID 스타일 적용 */
+    {cool_style}
+    {heat_style}
     
-    /* Streamlit의 내부 버튼 섀도우 제거 및 호버 시 색상 유지 */
-    .mode-cool-selected button:hover {
-        background-color: #D0EFFF !important; 
-        color: #0044AA !important; 
-    }
-    .mode-heat-selected button:hover {
-        background-color: #FFC0CB !important; 
-        color: #CC0000 !important; 
-    }
-
-    .temp-vertical-control {
+    .temp-vertical-control {{
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 10px;
         margin-top: 15px;
-    }
-    .current-temp-display {
+    }}
+    .current-temp-display {{
         font-size: 3rem;
         font-weight: 900;
         color: #3b82f6;
-    }
+    }}
     </style>
     <div class="remote-container">
     """, unsafe_allow_html=True)
@@ -128,25 +143,24 @@ if st.session_state.power == 'ON':
     mode_labels = {'Cool': '냉방 🧊', 'Heat': '난방 🔥'}
     
     cols = st.columns(2)
-    for i, mode in enumerate(mode_options):
-        is_selected = st.session_state.mode == mode
-        
-        # 선택된 모드에 따라 CSS 클래스를 동적으로 설정
-        if is_selected:
-            if mode == 'Cool':
-                css_class = 'mode-cool-selected'
-            else: # mode == 'Heat'
-                css_class = 'mode-heat-selected'
-        else:
-            css_class = '' # 비선택 시 기본 스타일 유지
+    
+    # 냉방 버튼
+    with cols[0]:
+        # 버튼을 감싸는 div에 고유 ID를 부여
+        st.markdown(f'<div id="mode-cool">', unsafe_allow_html=True) 
+        if st.button(mode_labels['Cool'], key=f"mode_Cool"):
+            st.session_state.mode = 'Cool'
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        with cols[i]:
-            # st.markdown을 사용하여 버튼을 감싸고 동적 CSS 클래스 적용
-            st.markdown(f'<div class="{css_class}">', unsafe_allow_html=True)
-            if st.button(mode_labels[mode], key=f"mode_{mode}"):
-                st.session_state.mode = mode
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True) # 닫는 div 태그
+    # 난방 버튼
+    with cols[1]:
+        # 버튼을 감싸는 div에 고유 ID를 부여
+        st.markdown(f'<div id="mode-heat">', unsafe_allow_html=True) 
+        if st.button(mode_labels['Heat'], key=f"mode_Heat"):
+            st.session_state.mode = 'Heat'
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
     # --- 5. 희망 온도 제어 (버튼 방식, 수직 배치) ---
