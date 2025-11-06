@@ -17,7 +17,8 @@ st.markdown("""
     <style>
     /* 전체 배경 이미지 설정 */
     div.stApp {
-        background-image: url("background_image.png");
+        /* 깃허브에 올리신 파일명(1.png)을 반영합니다. */
+        background-image: url("1.png");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
