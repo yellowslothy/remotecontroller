@@ -15,16 +15,9 @@ st.set_page_config(layout="centered", page_title="중앙 냉난방 시스템 리
 
 st.markdown("""
     <style>
-    /* 전체 배경 이미지 설정: static/1.png 파일명을 사용합니다. */
+    /* 전체 배경색을 하늘색으로 설정 */
     div.stApp {
-        background-image: url("static/1.png");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        /* 배경 이미지 위에 반투명한 레이어를 씌워 텍스트 가독성을 높임 */
-        background-color: rgba(247, 249, 251, 0.7);
-        background-blend-mode: overlay;
+        background-color: #B3E0FF; /* 밝은 하늘색 (Light Sky Blue) */
     }
     .remote-container {
         max-width: 400px;
@@ -32,8 +25,8 @@ st.markdown("""
         padding: 20px;
         border-radius: 20px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        background-color: rgba(255, 255, 255, 0.85); /* 반투명한 흰색 배경 */
-        backdrop-filter: blur(5px); /* 배경 이미지를 살짝 블러 처리 */
+        /* 리모컨 컨테이너 배경은 흰색으로 설정하여 대비를 줌 */
+        background-color: rgba(255, 255, 255, 0.95); 
         font-family: 'Arial', sans-serif;
     }
     .status-display {
