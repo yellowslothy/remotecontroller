@@ -15,13 +15,25 @@ st.set_page_config(layout="centered", page_title="중앙 냉난방 시스템 리
 
 st.markdown("""
     <style>
+    /* 전체 배경 이미지 설정 */
+    div.stApp {
+        background-image: url("background_image.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        /* 배경 이미지 위에 반투명한 레이어를 씌워 텍스트 가독성을 높임 */
+        background-color: rgba(247, 249, 251, 0.7);
+        background-blend-mode: overlay;
+    }
     .remote-container {
         max-width: 400px;
         margin: 0 auto;
         padding: 20px;
         border-radius: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        background-color: #f7f9fb; /* 라이트 그레이 배경 */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        background-color: rgba(255, 255, 255, 0.85); /* 반투명한 흰색 배경 */
+        backdrop-filter: blur(5px); /* 배경 이미지를 살짝 블러 처리 */
         font-family: 'Arial', sans-serif;
     }
     .status-display {
@@ -117,7 +129,7 @@ if st.session_state.power == 'ON':
             st.session_state.target_temp -= 1
             st.toast("온도 -1°C", icon="🔽")
 
-    temp_col = st.columns([1, 2, 1])[1]
+    temp_col = st.columns([1, 2, 1])[1] 
     
     with temp_col:
         st.markdown('<div class="temp-vertical-control">', unsafe_allow_html=True)
@@ -130,7 +142,7 @@ if st.session_state.power == 'ON':
         st.button("▼", on_click=decrease_temp, key='temp_down', help="온도를 1도 내립니다.", 
                   use_container_width=True)
                   
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True) 
 
     st.markdown(f"<div style='text-align: center; margin-top: 10px; font-size: 0.85rem;'>현재 온도 범위: {MIN_TEMP}°C ~ {MAX_TEMP}°C</div>", unsafe_allow_html=True)
 
