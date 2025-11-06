@@ -15,9 +15,9 @@ st.set_page_config(layout="centered", page_title="중앙 냉난방 시스템 리
 
 st.markdown("""
     <style>
-    /* 1. 전체 배경색을 흰색으로 설정 */
+    /* 1. 전체 배경색을 회색으로 설정 */
     div.stApp {
-        background-color: white; 
+        background-color: #CCCCCC; /* 회색 배경 */
     }
     .remote-container {
         max-width: 400px;
@@ -25,7 +25,8 @@ st.markdown("""
         padding: 20px;
         border-radius: 20px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        background-color: #FFFFFF; /* 리모컨 컨테이너 배경색 */
+        /* 리모컨 컨테이너 배경은 흰색으로 설정하여 대비를 줌 */
+        background-color: #FFFFFF; 
         font-family: 'Arial', sans-serif;
     }
     .status-display {
@@ -120,7 +121,7 @@ if st.session_state.power == 'ON':
             else: # mode == 'Heat'
                 css_class = 'mode-heat-selected'
         else:
-            css_class = ''
+            css_class = '' 
 
         with cols[i]:
             st.markdown(f'<div class="{css_class}">', unsafe_allow_html=True)
@@ -128,6 +129,7 @@ if st.session_state.power == 'ON':
                 st.session_state.mode = mode
                 st.rerun()
             st.markdown('</div>', unsafe_allow_html=True) 
+
 
     st.header("2. 희망 온도")
     
@@ -159,7 +161,8 @@ if st.session_state.power == 'ON':
         st.button("▼", on_click=decrease_temp, key='temp_down', help="온도를 1도 내립니다.", 
                   use_container_width=True)
                   
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True) 
+
     st.markdown(f"<div style='text-align: center; margin-top: 10px; font-size: 0.85rem;'>현재 온도 범위: {MIN_TEMP}°C ~ {MAX_TEMP}°C</div>", unsafe_allow_html=True)
 
 
@@ -172,6 +175,7 @@ if st.session_state.power == 'ON':
 
 else:
     st.warning("시스템이 현재 꺼져 있습니다. 전원 버튼을 눌러 켜주세요.")
+
 
 st.markdown("<br>", unsafe_allow_html=True)
 power_col1, power_col2, power_col3 = st.columns([1, 2, 1])
